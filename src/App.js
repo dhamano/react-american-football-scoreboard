@@ -1,37 +1,85 @@
 import React, { useState } from "react";
 import BottomRow from "./component/BottomRow";
+import TeamDisplay from "./component/TeamDisplay";
+import ScoreButtons from "./component/ScoreButtons";
 
 function App() {
- const [ homeScore, setHomeScore ] = useState(0);
+  const [ homeScore, setHomeScore ]       = useState(0);
   const [ visitorScore, setVisitorScore ] = useState(0);
+  const [ gameQuarter, nextQuarter ]      = useState(1);
+  const [ downs, setDowns ]               = useState(0);
+  const [ yardsToGo, setYardsToGo ]       = useState(10);
+  const [ ytgValue, changeytg ]           = useState(yardsToGo);
+  const [ ballOn, setBallOn ]             = useState(50);
+  const [ ballYardValue, setYardValue ]   = useState(ballOn);
+
+  const onClickHandler = event => {
+    event.target.dataset.team.toLowerCase() === "home" ? setHomeScore(homeScore + parseInt(event.target.dataset.points)) : setVisitorScore(visitorScore + parseInt(event.target.dataset.points))
+  }
+
+  const incrementQuarter = event => {
+    let nextQuarterValue = gameQuarter + 1;
+    nextQuarterValue <= 4 && nextQuarter(nextQuarterValue);
+  }
+
+  const resetQuarter = () => {
+    nextQuarter(1);
+  }
+
+  const incrementDowns = () => {
+    let nextDownValue = downs + 1;
+    nextDownValue <= 4 ? setDowns(nextDownValue) : clearDowns();
+  }
+
+  const clearDowns = () => {
+    setDowns(0);
+  }
+
+  const yardsChangeHandler = event => {
+    changeytg(event.target.value);
+  }
+
+  const updateYTG = () => {
+    setYardsToGo(ytgValue);
+  }
+
+  const ballYardsChangeHandler = event => {
+    setYardValue(event.target.value);
+  }
+
+  const updateBallYards = () => {
+    setBallOn(ballYardValue);
+  }
 
   return (
     <div className="container">
       <section className="scoreboard">
         <div className="topRow">
-          <div className="home">
-            <h2 className="home__name">Lions</h2>
-            <div className="home__score">{homeScore}</div>
-          </div>
+          <TeamDisplay name="home" score={homeScore} />
           <div className="timer">00:03</div>
-          <div className="away">
-            <h2 className="away__name">Tigers</h2>
-            <div className="away__score">{visitorScore}</div>
-          </div>
+          <TeamDisplay name="away" score={visitorScore} />
         </div>
-        <BottomRow />
+        <BottomRow gameQuarter={gameQuarter} downs={downs} yardsToGo={yardsToGo} ballOn={ballOn} />
       </section>
       <section className="buttons">
-        <div className="homeButtons">
-          <button onClick={ () => setHomeScore(homeScore + 6) } className="homeButtons__touchdown">Home Touchdown</button>
-          <button onClick={ () => setHomeScore(homeScore + 1) } className="homeButtons__touchdown">Home Extra Point</button>
-          <button onClick={ () => setHomeScore(homeScore + 3) } className="homeButtons__fieldGoal">Home Field Goal</button>
+        <div className="quarter__handler">
+          <button onClick={incrementQuarter}>Next Quarter</button>
+          <button onClick={resetQuarter}>Reset Quarter</button>
         </div>
-        <div className="awayButtons">
-          <button onClick={ () => setVisitorScore(visitorScore + 3) } className="awayButtons__touchdown">Away Touchdown</button>
-          <button onClick={ () => setVisitorScore(visitorScore + 1) } className="awayButtons__touchdown">Away Extra Point</button>
-          <button onClick={ () => setVisitorScore(visitorScore + 3) } className="awayButtons__fieldGoal">Away Field Goal</button>
+        <div className="downs">
+          <button onClick={incrementDowns}>Next Down</button>
+          <button onClick={clearDowns}>Clear Downs</button>
         </div>
+        <div className="yards">
+          <input onChange={yardsChangeHandler} type="number" value={ytgValue} />
+          <button onClick={updateYTG}>Update YTG</button>
+        </div>
+        <div className="ball-line">
+          <input onChange={ballYardsChangeHandler} type="number" value={ballYardValue} />
+          <button onClick={updateBallYards}>Update Ball Yardline</button>
+        </div>
+        <ScoreButtons name="Home" styleName="homeButtons" onClickHandler={onClickHandler} />
+        <ScoreButtons name="Visitor" styleName="awayButtons" onClickHandler={onClickHandler} />
       </section>
     </div>
   );

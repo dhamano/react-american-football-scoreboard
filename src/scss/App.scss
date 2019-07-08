@@ -111,12 +111,40 @@
   margin: 0 auto;
   display: flex;
   justify-content: space-around;
+  flex-flow: row nowrap;
+
+  div {
+    display: flex;
+    flex-flow: column nowrap;
+  }
 }
 
 .homeButtons__touchdown,
+.homeButtons__extrapoint,
 .homeButtons__fieldGoal,
 .awayButtons__touchdown,
+.awayButtons__extrapoint,
 .awayButtons__fieldGoal {
   margin: 1rem;
   border-radius: 4px;
+}
+
+.quarter__handler,
+.downs,
+.yards,
+.ball-line {
+
+  input {
+    margin: 1rem;
+    padding: 4px;
+    font-size: 2rem;
+    line-height: 1.25em;
+    border: solid 1px #ccc;
+    appearance: none;
+  }
+
+  input, button {
+    margin: 1rem;
+    border-radius: 4px;
+  }
 }
