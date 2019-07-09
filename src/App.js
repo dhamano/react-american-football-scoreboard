@@ -65,11 +65,17 @@ function App() {
   }
 
   const resetTimer = () => {
+    if(!timerPaused) {
+      setTimerPaused(!timerPaused);
+    }
     setQuarterTimer(900000);
   }
 
   useEffect(() => {
     parsedQuarterTimer();
+    if(quarterTimer <= 0 && !timerPaused) {
+      pauseTimer();
+    }
     let timerID = setInterval( () => !timerPaused && tick(), 1000 );
   
     return function cleanup() {
@@ -94,11 +100,9 @@ function App() {
         <BottomRow gameQuarter={gameQuarter} downs={downs} yardsToGo={yardsToGo} ballOn={ballOn} />
       </section>
       <section className="buttons">
-        <div className="quarter-timer">
+        <div className="quarter-stuff">
           <button onClick={pauseTimer}>{`${timerPaused ? 'Start Timer' : 'Pause Timer'}`}</button>
           <button onClick={resetTimer}>Reset Timer</button>
-        </div>
-        <div className="quarter__handler">
           <button onClick={incrementQuarter}>Next Quarter</button>
           <button onClick={resetQuarter}>Reset Quarter</button>
         </div>
@@ -109,8 +113,6 @@ function App() {
         <div className="yards">
           <input onChange={yardsChangeHandler} type="number" value={ytgValue} />
           <button onClick={updateYTG}>Update YTG</button>
-        </div>
-        <div className="ball-line">
           <input onChange={ballYardsChangeHandler} type="number" value={ballYardValue} />
           <button onClick={updateBallYards}>Update Ball Yardline</button>
         </div>

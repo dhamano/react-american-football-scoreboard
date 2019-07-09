@@ -107,15 +107,16 @@
 }
 
 .buttons {
-  width: 50%;
+  width: calc(100% - 50px);
   margin: 0 auto;
   display: flex;
   justify-content: space-around;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
 
   div {
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
+    justify-content: center;
   }
 }
 
@@ -129,15 +130,15 @@
   border-radius: 4px;
 }
 
-.quarter__handler,
 .downs,
 .yards,
-.ball-line,
-.quarter-timer {
+.quarter-stuff {
 
   input {
+    max-width: 50px;
     margin: 1rem;
     padding: 4px;
+    text-align: center;
     font-size: 2rem;
     line-height: 1.25em;
     border: solid 1px #ccc;
@@ -148,4 +149,10 @@
     margin: 1rem;
     border-radius: 4px;
   }
+}
+
+.quarter-timer {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
 }
